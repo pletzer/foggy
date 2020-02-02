@@ -26,7 +26,7 @@ def shuffle(x, y):
 df = pd.read_csv('export_dataframe_subset_blind_with_fg.csv')
 print(f"number of cases with/without fog {(df['fg'] == 1).sum()}/{(df['fg'] == 0).sum()}")
 
-for fld in ['msl_p?', 'r_p?_l0']:
+for fld in ['d2m_p?', 'msl_p?', 'r_p?_l0']:
     for i in range(4):
         colname = fld.replace('?', str(i))
         print(f'max/min of {colname}: {df[colname].max()}/{df[colname].min()}')
@@ -43,7 +43,8 @@ dfNorm = pd.DataFrame(x_scaled, columns=df2.columns)
 
 print('after normalization')
 cols = []
-for fld in ['d2m_p?', 'msl_p?', 'r_p?_l0',]:
+#for fld in ['t2m_p?', 'd2m_p?', 'msl_p?', 'u_p?_l1']: # 'r_p?_l0',]:
+for fld in ['t2m_p?', 'd2m_p?', 'msl_p?', 'u_p?_l1', 'r_p?_l0',]:
     for i in range(4): # number of points
         colname = fld.replace('?', str(i))
         print(f'max/min of {colname}: {dfNorm[colname].max()}/{dfNorm[colname].min()}')
@@ -77,7 +78,7 @@ xTrain, yTrain = shuffle(xSelect, ySelect)
 print(f'total    set has {(y == 1).sum()}/{(y == 0).sum()} cases with/without fog')
 print(f'training set has {(yTrain == 1).sum()}/{(yTrain == 0).sum()} cases with/without fog')
 
-# build model
+# build dense neural network model
 model = keras.models.Sequential()
 model.add( keras.layers.Dense(8, activation='relu') )
 model.add( keras.layers.Dropout(0.1) )
