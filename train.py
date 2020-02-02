@@ -54,8 +54,8 @@ x = np.zeros((dfNorm.shape[0], len(cols)), np.float32)
 y = np.array(dfNorm['fg'])
 
 # choose n samples of each fog/non-fog cases
-n = 45
-rs = dfNorm.groupby(['fg']).apply(lambda x: x.sample(n))
+n = 1000 #45
+rs = dfNorm.groupby(['fg']).apply(lambda x: x.sample(n, replace=True))
 xSelect = np.zeros((rs.shape[0], len(cols)), np.float32)
 ySelect = np.array(rs['fg'])
 
@@ -80,7 +80,11 @@ print(f'training set has {(yTrain == 1).sum()}/{(yTrain == 0).sum()} cases with/
 # build model
 model = keras.models.Sequential()
 model.add( keras.layers.Dense(8, activation='relu') )
-model.add( keras.layers.Dense(8, activation='relu') )
+model.add( keras.layers.Dropout(0.1) )
+model.add( keras.layers.Dense(16, activation='relu') )
+model.add( keras.layers.Dropout(0.1) )
+model.add( keras.layers.Dense(16, activation='relu') )
+model.add( keras.layers.Dropout(0.1) )
 model.add( keras.layers.Dense(8, activation='relu') )
 #model.add( keras.layers.Dense(8, activation='relu') )
 #model.add( keras.layers.Dense(8, activation='relu') )
@@ -93,7 +97,7 @@ model.compile(optimizer='sgd',
 #              metrics=['accuracy'])
 
 # train
-model.fit(xTrain, yTrain, epochs=100)
+model.fit(xTrain, yTrain, epochs=1000)
 
 print(model.summary())
 
@@ -109,5 +113,6 @@ print(f'number of errors = {num_errors} out of {x.shape[0]} ({100*num_errors/x.s
 
 # compute the confusion matrix
 confusion_mat = confusion_matrix(y, yPred)
+print('confusion matrix:')
 print(confusion_mat)
 
