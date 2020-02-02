@@ -43,7 +43,7 @@ dfNorm = pd.DataFrame(x_scaled, columns=df2.columns)
 
 print('after normalization')
 cols = []
-for fld in ['msl_p?', 'r_p?_l0',]:
+for fld in ['d2m_p?', 'msl_p?', 'r_p?_l0',]:
     for i in range(4): # number of points
         colname = fld.replace('?', str(i))
         print(f'max/min of {colname}: {dfNorm[colname].max()}/{dfNorm[colname].min()}')
